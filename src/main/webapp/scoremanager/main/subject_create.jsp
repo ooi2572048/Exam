@@ -11,7 +11,7 @@
     <header>
         <h1>得点管理システム</h1>
         <div class="user-info">
-            <c:out value="${user.name}" /> 様
+            <c:out value="${user.teacherName}" /> 様
             <a href="../logout.action">ログアウト</a>
         </div>
     </header>
