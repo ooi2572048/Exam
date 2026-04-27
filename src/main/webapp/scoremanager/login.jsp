@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:import url="/common/base.jsp">
 	<c:param name="title">
-		得点管理システム
+		得点管理システム本田バカ
 	</c:param>
 
 	<c:param name="scripts">
