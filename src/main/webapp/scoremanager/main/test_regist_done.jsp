@@ -1,13 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
 <c:import url="/common/base.jsp">
-    <c:param name="title">登録完了</c:param>
+    <c:param name="title">学生情報変更完了</c:param>
+
     <c:param name="content">
-        <div class="container mt-5 text-center">
-            <h2 class="mb-4">登録が完了しました</h2>
-            <p class="mb-4">成績データが正しく保存されました。</p>
-            <a href="scoremanager.main.TestRegist.action" class="btn btn-primary">続けて登録する</a>
-            <a href="scoremanager.main.MenuAction.action" class="btn btn-secondary">メニューへ戻る</a>
-        </div>
+		<div id="wrap_box">
+			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2">科目情報変更</h2>
+			<div id="wrap_box">
+				<p class="text-center" style="background-color:#8cc3a9">変更が完了しました</p>
+
+				<br>
+				<br>
+				<br>
+
+        <br>
+        
+		<a href="TestRegist.action" style="margin-right: 16px;">戻る</a>
+		<a href="TestList.action">成績参照</a>
+
     </c:param>
 </c:import>
