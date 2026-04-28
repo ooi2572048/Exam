@@ -30,8 +30,8 @@ public class SubjectDao extends Dao {
 
             if (rs.next()) {
                 subject = new Subject();
-                subject.setCd(rs.getString("CD"));
-                subject.setName(rs.getString("NAME"));
+                subject.setCd(rs.getString("SUBJECT_CD"));
+                subject.setName(rs.getString("SUBJECT_NAME"));
                 subject.setSchool(school);
             }
         } finally {
@@ -95,7 +95,7 @@ public class SubjectDao extends Dao {
                 st.setString(3, subject.getName());
             } else {
                 // 存在する場合は UPDATE
-                String sql = "UPDATE SUBJECT SET NAME = ? WHERE SUBJECT_CD = ? AND SCHOOL_CD = ?";
+                String sql = "UPDATE SUBJECT SET SUBJECT_NAME = ? WHERE SUBJECT_CD = ? AND SCHOOL_CD = ?";
                 st = con.prepareStatement(sql);
                 st.setString(1, subject.getName());
                 st.setString(2, subject.getCd());
@@ -123,7 +123,7 @@ public class SubjectDao extends Dao {
         boolean result = false;
 
         try {
-            String sql = "DELETE FROM SUBJECT WHERE CD = ? AND SCHOOL_CD = ?";
+            String sql = "DELETE FROM SUBJECT WHERE SUBJECT_CD = ? AND SCHOOL_CD = ?";
             st = con.prepareStatement(sql);
             st.setString(1, subject.getCd());
             // 修正箇所： getSchoolCd() に変更
