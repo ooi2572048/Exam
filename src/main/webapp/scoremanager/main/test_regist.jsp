@@ -78,13 +78,13 @@
                                 <tr class="align-middle">
                                     <td>${test.student.entYear}</td>
                                     <td>${test.classNum}</td>
-                                    <td>${test.student.no}</td>
-                                    <td>${test.student.name}</td>
+                                    <td>${test.student.studentNo}</td>
+                                    <td>${test.student.studentName}</td>
                                     <td>
                                         <input type="number" name="point" value="${test.point}" 
                                                class="form-control" style="max-width: 300px;" 
                                                min="0" max="100">
-                                        <input type="hidden" name="student_no" value="${test.student.no}">
+                                        <input type="hidden" name="student_no" value="${test.student.studentNo}">
                                     </td>
                                 </tr>
                             </c:forEach>

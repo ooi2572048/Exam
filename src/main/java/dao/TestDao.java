@@ -24,11 +24,17 @@ public class TestDao extends Dao {
         
         // 学生(STUDENT)を主軸に、成績(TEST)を外部結合(LEFT OUTER JOIN)します。
         // これにより、点数が未登録の学生も一覧に表示されます。
-        String sql = "SELECT S.NO, S.NAME, S.ENT_YEAR, S.CLASS_NUM, T.POINT " +
-                     "FROM STUDENT S " +
-                     "LEFT OUTER JOIN TEST T ON S.NO = T.STUDENT_NO AND T.SUBJECT_CD = ? AND T.NO = ? " +
-                     "WHERE S.SCHOOL_CD = ? AND S.ENT_YEAR = ? AND S.CLASS_NUM = ? " +
-                     "ORDER BY S.NO ASC";
+        String sql =
+        		  "SELECT S.STUDENT_NO, S.STUDENT_NAME, S.ENT_YEAR, S.CLASS_NUM, T.POINT " +
+        		  "FROM STUDENT S " +
+        		  "LEFT OUTER JOIN TEST T " +
+        		  " ON S.STUDENT_NO = T.STUDENT_NO " +
+        		  " AND T.SUBJECT_CD = ? " +
+        		  " AND T.NO = ? " +
+        		  "WHERE S.SCHOOL_CD = ? " +
+        		  " AND S.ENT_YEAR = ? " +
+        		  " AND S.CLASS_NUM = ? " +
+        		  "ORDER BY S.STUDENT_NO ASC";
 
         try {
             st = con.prepareStatement(sql);
@@ -45,8 +51,8 @@ public class TestDao extends Dao {
                 Student student = new Student();
                 
                 // Beanのメソッド名(setStudentNo, setStudentName等)はご自身の環境に合わせてください
-                student.setStudentNo(rSet.getString("NO"));
-                student.setStudentName(rSet.getString("NAME"));
+                student.setStudentNo(rSet.getString("STUDENT_NO"));
+                student.setStudentName(rSet.getString("STUDENT_NAME"));
                 student.setEntYear(rSet.getInt("ENT_YEAR"));
                 
                 test.setStudent(student);
