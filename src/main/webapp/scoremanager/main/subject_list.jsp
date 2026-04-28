@@ -1,5 +1,4 @@
-list.jsp
- 
+
 <%-- 科目一覧JSP --%>
 
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
