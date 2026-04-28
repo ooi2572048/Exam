@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
 <c:import url="/common/base.jsp">
-    <c:param name="title">学生情報変更完了</c:param>
+    <c:param name="title">学生情報削除完了</c:param>
 
     <c:param name="content">
 		<div id="wrap_box">

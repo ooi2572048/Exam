@@ -1,87 +1,102 @@
+list.jsp
+ 
+<%-- 科目一覧JSP --%>
+
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+ 
+<c:import url="/common/base.jsp">
+<c:param name="title">
+
+        科目管理 | 得点管理システム
+</c:param>
+ 
+    <c:param name="content">
+<section class="me-4">
+<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">科目管理</h2>
+ 
+            <div class="text-end mb-3 px-4">
+<a href="SubjectCreate.action">新規登録</a>
+</div>
+ 
+            <div class="px-4">
+<table class="table table-hover">
+<thead>
+<tr>
+<th>科目コード</th>
+<th>科目名</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<c:forEach var="subject" items="${subjects}">
+<tr>
+<td><c:out value="${subject.cd}" /></td>
+<td><c:out value="${subject.name}" /></td>
+<td><a href="SubjectUpdate.action?cd=${subject.cd}">変更</a></td>
+<td><a href="SubjectDelete.action?cd=${subject.cd}">削除</a></td>
+</tr>
+</c:forEach>
+</tbody>
+</table>
+</div>
+</section>
+</c:param>
+</c:import>
+ 
+subject_create.jsp
+ 
+ 
+<%-- 科目情報登録JSP --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>科目管理 | 得点管理システム</title>
-    <link rel="stylesheet" href="../../css/style.css">
-</head>
-<body>
-    <header>
-        <h1>得点管理システム</h1>
-        <div class="user-info">
-            <c:out value="${user.teacherName}" /> 様
-            <a href="../logout.action">ログアウト</a>
-        </div>
-    </header>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+ 
+<c:import url="/common/base.jsp">
+<c:param name="title">
 
-    <div class="container">
-        <aside>
-            <ul>
-                <li><a href="Menu.action">メニュー</a></li>
-                <li><a href="StudentList.action">学生管理</a></li>
-                <li>成績管理
-                    <ul>
-                        <li><a href="ScoreCreate.action">成績登録</a></li>
-                        <li><a href="ScoreList.action">成績参照</a></li>
-                    </ul>
-                </li>
-                <li><a href="SubjectList.action">科目管理</a></li>
-            </ul>
-        </aside>
+        科目情報登録 | 得点管理システム
+</c:param>
+ 
+    <c:param name="content">
+<section class="me-4">
+<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">科目情報登録</h2>
+ 
+            <div class="mt-5 px-4">
+<%-- エラーメッセージ表示 --%>
+<c:if test="${not empty errors}">
+<div class="alert alert-danger">
+<c:forEach var="error" items="${errors}">
+<div><c:out value="${error}" /></div>
+</c:forEach>
+</div>
+</c:if>
+ 
+                <form action="SubjectCreateExecute.action" method="post">
+<div class="mb-4">
+<label for="cd" class="form-label">科目コード</label>
+<input type="text" id="cd" name="cd" value="${cd}" 
 
-        <main>
-            <h2>科目管理</h2>
+                               class="form-control w-25" placeholder="科目コードを入力してください" 
 
-            <div style="text-align: right; margin-bottom: 10px;">
-                <a href="SubjectCreate.action">新規登録</a>
-            </div>
+                               maxlength="3" required>
+</div>
+ 
+                    <div class="mb-4">
+<label for="name" class="form-label">科目名</label>
+<input type="text" id="name" name="name" value="${name}" 
 
-            <table border="1" style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <th style="padding: 8px; text-align: left;">科目コード</th>
-                        <th style="padding: 8px; text-align: left;">科目名</th>
-                        <th style="padding: 8px;"></th>
-                        <th style="padding: 8px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:choose>
-                        <%-- 科目が1件も登録されていない場合の表示 --%>
-                        <c:when test="${empty subjects}">
-                            <tr>
-                                <td colspan="4" style="text-align: center; padding: 15px;">
-                                    科目が存在しません
-                                </td>
-                            </tr>
-                        </c:when>
-                        
-                        <%-- 科目が登録されている場合はループで表示 --%>
-                        <c:otherwise>
-                            <c:forEach var="subject" items="${subjects}">
-                                <tr>
-                                    <td style="padding: 8px;"><c:out value="${subject.cd}" /></td>
-                                    <td style="padding: 8px;"><c:out value="${subject.name}" /></td>
-                                    
-                                    <td style="padding: 8px; text-align: center;">
-                                        <a href="SubjectUpdate.action?cd=${subject.cd}">変更</a>
-                                    </td>
-                                    <td style="padding: 8px; text-align: center;">
-                                        <a href="SubjectDelete.action?cd=${subject.cd}">削除</a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </c:otherwise>
-                    </c:choose>
-                </tbody>
-            </table>
-        </main>
-    </div>
+                               class="form-control w-50" placeholder="科目名を入力してください" 
 
-    <footer>
-        <p>&copy; 2023 TIC 大原学園</p>
-    </footer>
-</body>
-</html>
+                               maxlength="20" required>
+</div>
+ 
+                    <div class="mt-5">
+<button type="submit" class="btn btn-primary me-3">登録</button>
+<a href="SubjectList.action">戻る</a>
+</div>
+</form>
+</div>
+</section>
+</c:param>
+</c:import>
+ 
