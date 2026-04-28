@@ -21,7 +21,7 @@ public class SubjectDao extends Dao {
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT * FROM SUBJECT WHERE CD = ? AND SCHOOL_CD = ?";
+            String sql = "SELECT * FROM SUBJECT WHERE SUBJECT_CD = ? AND SCHOOL_CD = ?";
             st = con.prepareStatement(sql);
             st.setString(1, cd);
             // 修正箇所： getSchoolCd() に変更
@@ -60,8 +60,8 @@ public class SubjectDao extends Dao {
 
             while (rs.next()) {
                 Subject subject = new Subject();
-                subject.setCd(rs.getString("CD"));
-                subject.setName(rs.getString("NAME"));
+                subject.setCd(rs.getString("SUBJECT_CD"));
+                subject.setName(rs.getString("SUBJECT_NAME"));
                 subject.setSchool(school);
                 list.add(subject);
             }
@@ -87,7 +87,7 @@ public class SubjectDao extends Dao {
 
             if (existing == null) {
                 // 存在しない場合は INSERT
-                String sql = "INSERT INTO SUBJECT (SCHOOL_CD, CD, NAME) VALUES (?, ?, ?)";
+                String sql = "INSERT INTO SUBJECT (SCHOOL_CD, SUBJECT_CD, SUBJECT_NAME) VALUES (?, ?, ?)";
                 st = con.prepareStatement(sql);
                 // 修正箇所： getSchoolCd() に変更
                 st.setString(1, subject.getSchool().getSchoolCd());
@@ -95,7 +95,7 @@ public class SubjectDao extends Dao {
                 st.setString(3, subject.getName());
             } else {
                 // 存在する場合は UPDATE
-                String sql = "UPDATE SUBJECT SET NAME = ? WHERE CD = ? AND SCHOOL_CD = ?";
+                String sql = "UPDATE SUBJECT SET NAME = ? WHERE SUBJECT_CD = ? AND SCHOOL_CD = ?";
                 st = con.prepareStatement(sql);
                 st.setString(1, subject.getName());
                 st.setString(2, subject.getCd());
