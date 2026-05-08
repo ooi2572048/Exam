@@ -15,26 +15,23 @@ public class TestDao extends Dao {
 
     /**
      * 指定された条件（入学年度、クラス、科目、回数）に一致する成績リストを取得する
-     * 赤枠のテーブルを表示するために使用します。
      */
     public List<Test> filter(School school, int entYear, String classNum, Subject subject, int num) throws Exception {
         List<Test> list = new ArrayList<>();
         Connection con = getConnection();
         PreparedStatement st = null;
         
-        // 学生(STUDENT)を主軸に、成績(TEST)を外部結合(LEFT OUTER JOIN)します。
-        // これにより、点数が未登録の学生も一覧に表示されます。
-        String sql =
-        		  "SELECT S.STUDENT_NO, S.STUDENT_NAME, S.ENT_YEAR, S.CLASS_NUM, T.POINT " +
-        		  "FROM STUDENT S " +
-        		  "LEFT OUTER JOIN TEST T " +
-        		  " ON S.STUDENT_NO = T.STUDENT_NO " +
-        		  " AND T.SUBJECT_CD = ? " +
-        		  " AND T.NO = ? " +
-        		  "WHERE S.SCHOOL_CD = ? " +
-        		  " AND S.ENT_YEAR = ? " +
-        		  " AND S.CLASS_NUM = ? " +
-        		  "ORDER BY S.STUDENT_NO ASC";
+        // 学生(STUDENT)を主軸に、成績(TEST)を外部結合(LEFT OUTER JOIN)
+        String sql = "SELECT S.STUDENT_NO, S.STUDENT_NAME, S.ENT_YEAR, S.CLASS_NUM, T.POINT " +
+                     "FROM STUDENT S " +
+                     "LEFT OUTER JOIN TEST T " +
+                     " ON S.STUDENT_NO = T.STUDENT_NO " +
+                     " AND T.SUBJECT_CD = ? " +
+                     " AND T.NO = ? " +
+                     "WHERE S.SCHOOL_CD = ? " +
+                     " AND S.ENT_YEAR = ? " +
+                     " AND S.CLASS_NUM = ? " +
+                     "ORDER BY S.STUDENT_NO ASC";
 
         try {
             st = con.prepareStatement(sql);
@@ -50,7 +47,6 @@ public class TestDao extends Dao {
                 Test test = new Test();
                 Student student = new Student();
                 
-                // Beanのメソッド名(setStudentNo, setStudentName等)はご自身の環境に合わせてください
                 student.setStudentNo(rSet.getString("STUDENT_NO"));
                 student.setStudentName(rSet.getString("STUDENT_NAME"));
                 student.setEntYear(rSet.getInt("ENT_YEAR"));
@@ -60,8 +56,13 @@ public class TestDao extends Dao {
                 test.setSubject(subject);
                 test.setNo(num);
                 test.setSchool(school);
-                // 点数が登録されていない場合は NULL ですが、getInt は 0 を返します
+                
+                // pointはInteger型であることを想定。nullの場合は-1をセットするなどの工夫も可能
                 test.setPoint(rSet.getInt("POINT"));
+                // getIntは値がNULLの場合0を返すため、もしNULLと0を区別したい場合は res.wasNull() を使用します
+                if (rSet.wasNull()) {
+                    test.setPoint(-1); // 未登録状態として-1をセット（参照画面の棒線表示と整合性を取るため）
+                }
                 
                 list.add(test);
             }
@@ -80,7 +81,6 @@ public class TestDao extends Dao {
     public void save(List<Test> tests) throws Exception {
         Connection con = getConnection();
         try {
-            // トランザクション処理を行う場合はここで con.setAutoCommit(false) 等を入れる
             for (Test test : tests) {
                 saveOne(test, con);
             }
@@ -97,7 +97,6 @@ public class TestDao extends Dao {
     private void saveOne(Test test, Connection con) throws Exception {
         PreparedStatement st = null;
         try {
-            // 主キーが重複していれば更新、なければ挿入を行う便利なSQLです
             st = con.prepareStatement(
                 "MERGE INTO TEST (STUDENT_NO, SUBJECT_CD, SCHOOL_CD, NO, POINT, CLASS_NUM) " +
                 "KEY (STUDENT_NO, SUBJECT_CD, NO) " +
@@ -109,6 +108,43 @@ public class TestDao extends Dao {
             st.setInt(4, test.getNo());
             st.setInt(5, test.getPoint());
             st.setString(6, test.getClassNum());
+            
+            st.executeUpdate();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (st != null) st.close();
+        }
+    }
+
+    /**
+     * 成績リストを一括削除する（空欄登録時の対応）
+     */
+    public void delete(List<Test> tests) throws Exception {
+        Connection con = getConnection();
+        try {
+            for (Test test : tests) {
+                deleteOne(test, con);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (con != null) con.close();
+        }
+    }
+
+    /**
+     * 1件の成績データを削除する
+     */
+    private void deleteOne(Test test, Connection con) throws Exception {
+        PreparedStatement st = null;
+        try {
+            String sql = "DELETE FROM TEST WHERE STUDENT_NO = ? AND SUBJECT_CD = ? AND NO = ? AND SCHOOL_CD = ?";
+            st = con.prepareStatement(sql);
+            st.setString(1, test.getStudent().getStudentNo());
+            st.setString(2, test.getSubject().getCd());
+            st.setInt(3, test.getNo());
+            st.setString(4, test.getSchool().getSchoolCd());
             
             st.executeUpdate();
         } catch (Exception e) {

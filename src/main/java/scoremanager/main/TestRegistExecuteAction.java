@@ -2,7 +2,6 @@ package scoremanager.main;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import bean.Student;
 import bean.Subject;
 import bean.Teacher;
@@ -25,7 +24,9 @@ public class TestRegistExecuteAction extends Action {
         String noStr = req.getParameter("no");
         String classNum = req.getParameter("class_num");
 
-        List<Test> list = new ArrayList<>(); 
+        List<Test> saveList = new ArrayList<>();   // 保存（更新）用
+        List<Test> deleteList = new ArrayList<>(); // 削除用
+
         if (studentNos != null && points != null) {
             int no = Integer.parseInt(noStr);
             Subject subject = new Subject();
@@ -40,14 +41,29 @@ public class TestRegistExecuteAction extends Action {
                 test.setSchool(teacher.getSchool());
                 test.setNo(no);
                 test.setClassNum(classNum);
-                test.setPoint(Integer.parseInt(points[i]));
-                list.add(test);
+
+                // 点数が空欄かどうかで振り分ける
+                if (points[i] == null || points[i].trim().isEmpty()) {
+                    deleteList.add(test); // 空欄なら削除リストへ
+                } else {
+                    test.setPoint(Integer.parseInt(points[i]));
+                    saveList.add(test);   // 入力ありなら保存リストへ
+                }
             }
         }
 
         TestDao tDao = new TestDao();
-        tDao.save(list);
+        
+        // 保存処理
+        if (!saveList.isEmpty()) {
+            tDao.save(saveList);
+        }
+        
+        // 削除処理（空欄のデータをDBから消す）
+        if (!deleteList.isEmpty()) {
+            tDao.delete(deleteList);
+        }
 
-        res.sendRedirect("test_regist_done.jsp");
+        req.getRequestDispatcher("test_regist_done.jsp").forward(req, res);
     }
 }
