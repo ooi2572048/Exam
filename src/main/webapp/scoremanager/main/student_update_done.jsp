@@ -13,7 +13,7 @@
 				<br>
 				<br>
 				<br>
-		入学年度：${studetn.entYear}<br>
+		入学年度：${student.entYear}<br>
         学生番号：${student.studentNo}<br>
         氏名：${student.studentName}<br>
         クラス：${student.classNum}<br>

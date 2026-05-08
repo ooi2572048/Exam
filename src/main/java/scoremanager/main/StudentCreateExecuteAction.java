@@ -37,6 +37,12 @@ public class StudentCreateExecuteAction extends Action {
 		// なし
 
 		// ビジネスロジック 4
+	
+		// 氏名未入力チェック
+		if (student_name == null || student_name.trim().isEmpty()) {
+		    errors.put("name", "氏名を入力してください");
+		}
+
 		if (ent_year == 0) { // 入学年度が未選択だった場合
 			errors.put("1", "入学年度を選択してください");
 			// リクエストにエラーメッセージをセット
