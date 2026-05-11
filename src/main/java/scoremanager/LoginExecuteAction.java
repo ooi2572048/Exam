@@ -3,12 +3,11 @@ package scoremanager;
 import java.util.ArrayList;
 import java.util.List;
 
+import bean.Teacher;
+import dao.TeacherDao;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import bean.Teacher;
-import dao.TeacherDao;
 import tool.Action;
 
 
