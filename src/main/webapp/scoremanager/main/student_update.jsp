@@ -22,23 +22,17 @@
     <form action="StudentUpdateExecute.action" method="post">
 
 
-     <div>
+     <div class="mx-auto py-2">
 		    <label for="entYear">入学年度</label>
-		    <select class="form-select" id="entYear" name="entYear">
-		        <option value="0">--------</option>
-		        <c:forEach var="year" items="${ent_year_set}">
-		            <option value="${year}"
-		                <c:if test="${year == student.entYear}">selected</c:if>>
-		                ${year}
-		            </option>
-		        </c:forEach>
-		    </select>
+		    <input type="hidden" name="studentNo" value="${student.entYear}">
+		    <br>
+		    <span class="ms-3">${student.entYear}</span>
 		</div>
 		
         <!-- 学生番号 -->
-        <div>
+        <div class="mx-auto py-2">
             <label>学生番号</label><br>
-            ${student.studentNo}
+            <span class="ms-3">${student.studentNo}</span>
             <input type="hidden" name="studentNo" value="${student.studentNo}">
         </div>
 

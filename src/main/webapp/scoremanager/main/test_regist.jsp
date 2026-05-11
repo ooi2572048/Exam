@@ -5,11 +5,12 @@
 
     <c:param name="content">
         <section class="container-fluid mt-4">
-            <h2 class="h4 border-bottom pb-2 mb-4">成績管理</h2>
-
+            <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績管理</h2>
+            <br>
             <%-- 上段：検索条件指定エリア --%>
             <form action="TestRegist.action" method="get">
-                <div class="row g-3 align-items-end mb-4 bg-light p-3 rounded border mx-1">
+                <div class="row g-3 align-items-end mb-4 p-3 rounded border mx-1">
+
                     <div class="col-md-2">
                         <label class="form-label small">入学年度</label>
                         <select class="form-select" name="f1">
@@ -46,8 +47,8 @@
                             </c:forEach>
                         </select>
                     </div>
-                    <div class="col-md-1">
-                        <button type="submit" class="btn btn-secondary w-100">検索</button>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-secondary ">検索</button>
                     </div>
                 </div>
             </form>
