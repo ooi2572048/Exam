@@ -6,7 +6,7 @@
     <c:param name="content">
         <section class="me-4">
             <%-- タイトル：検索前は「成績参照」、検索後は各一覧名に --%>
-            <h2 class="h3 mb-3 fw-normal">
+           <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">
                 <c:choose>
                     <c:when test="${title_type == 'subject'}">成績一覧（科目）</c:when>
                     <c:when test="${title_type == 'student'}">成績一覧（学生）</c:when>
@@ -15,7 +15,7 @@
             </h2>
             
             <form action="TestList.action" method="get">
-                <div class="border border-1 p-4 mb-3" style="background-color: #f8f9fa;">
+                <div class="border border-1 p-4 mb-3"">
                     <%-- 科目情報セクション --%>
                     <div class="d-flex align-items-center mb-3">
                         <p class="fw-bold mb-0 me-3" style="width: 100px;">科目情報</p>
@@ -47,8 +47,8 @@
                                     </c:forEach>
                                 </select>
                             </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button class="btn btn-secondary w-100">検索</button>
+                            <div class="col-auto d-flex align-items-end">
+                                <button class="btn btn-secondary ">検索</button>
                             </div>
                         </div>
                     </div>
@@ -59,12 +59,12 @@
                     <div class="d-flex align-items-center">
                         <p class="fw-bold mb-0 me-3" style="width: 100px;">学生情報</p>
                         <div class="row g-3 flex-grow-1">
-                            <div class="col-md-9">
+                            <div class="col-md-6">
                                 <label class="form-label small">学生番号</label>
                                 <input type="text" name="f4" value="${f4}" class="form-control" placeholder="学生番号を入力してください">
                             </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button class="btn btn-secondary w-100">検索</button>
+                            <div class="col-auto d-flex align-items-end">
+                                <button class="btn btn-secondary ">検索</button>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,6 @@
                         <%-- 正常にデータがある場合 --%>
                         <c:when test="${not empty tests_subject}">
                             <table class="table table-hover mt-3">
-                                <thead class="table-light">
                                     <tr>
                                         <th>入学年度</th><th>クラス</th><th>学生番号</th><th>氏名</th><th>1回</th><th>2回</th>
                                     </tr>
@@ -126,7 +125,7 @@
                                 <p class="fs-5">氏名：${student_info.studentName} (${student_info.studentNo})</p>
                             </div>
                             <table class="table table-hover">
-                                <thead class="table-light">
+                                
                                     <tr>
                                         <th>科目名</th><th>科目コード</th><th>回数</th><th>点数</th>
                                     </tr>
