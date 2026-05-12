@@ -23,11 +23,11 @@
 
 
      <div class="mx-auto py-2">
-		    <label for="entYear">入学年度</label>
-		    <input type="hidden" name="studentNo" value="${student.entYear}">
-		    <br>
-		    <span class="ms-3">${student.entYear}</span>
-		</div>
+    <label for="entYear">入学年度</label>
+    <input type="hidden" name="entYear" value="${student.entYear}">
+    <br>
+    <span class="ms-3">${student.entYear}</span>
+</div>
 		
         <!-- 学生番号 -->
         <div class="mx-auto py-2">

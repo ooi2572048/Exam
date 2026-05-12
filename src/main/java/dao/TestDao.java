@@ -14,6 +14,56 @@ import bean.Test;
 public class TestDao extends Dao {
 
     /**
+     * 学校に紐づく入学年度の一覧を取得する（重複なし、昇順）
+     */
+    public List<Integer> filterEntYear(School school) throws Exception {
+        List<Integer> list = new ArrayList<>();
+        Connection con = getConnection();
+        PreparedStatement st = null;
+
+        String sql = "SELECT DISTINCT S.ENT_YEAR FROM STUDENT S " +
+                     "WHERE S.SCHOOL_CD = ? " +
+                     "ORDER BY S.ENT_YEAR ASC";
+        try {
+            st = con.prepareStatement(sql);
+            st.setString(1, school.getSchoolCd());
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(rs.getInt("ENT_YEAR"));
+            }
+        } finally {
+            if (st != null) st.close();
+            if (con != null) con.close();
+        }
+        return list;
+    }
+
+    /**
+     * 学校に紐づくクラス番号の一覧を取得する（重複なし、昇順）
+     */
+    public List<String> filterClassNum(School school) throws Exception {
+        List<String> list = new ArrayList<>();
+        Connection con = getConnection();
+        PreparedStatement st = null;
+
+        String sql = "SELECT DISTINCT S.CLASS_NUM FROM STUDENT S " +
+                     "WHERE S.SCHOOL_CD = ? " +
+                     "ORDER BY S.CLASS_NUM ASC";
+        try {
+            st = con.prepareStatement(sql);
+            st.setString(1, school.getSchoolCd());
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                list.add(rs.getString("CLASS_NUM"));
+            }
+        } finally {
+            if (st != null) st.close();
+            if (con != null) con.close();
+        }
+        return list;
+    }
+
+    /**
      * 指定された条件（入学年度、クラス、科目、回数）に一致する成績リストを取得する
      */
     public List<Test> filter(School school, int entYear, String classNum, Subject subject, int num) throws Exception {

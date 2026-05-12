@@ -21,19 +21,16 @@ public class TestListSubjectDao extends Dao {
         while (res.next()) {
             TestListSubject ts = new TestListSubject();
             ts.setEntYear(res.getInt("ENT_YEAR"));
-            ts.setStudentNo(res.getString("STUDENT_NO")); 
-            ts.setStudentName(res.getString("STUDENT_NAME")); 
+            ts.setStudentNo(res.getString("STUDENT_NO"));
+            ts.setStudentName(res.getString("STUDENT_NAME"));
             ts.setClassNum(res.getString("CLASS_NUM"));
-            
-            // 点数の処理：NULLの場合は-1をセット
-            int point = res.getInt("POINT");
-            if (res.wasNull()) {
-                ts.setPoint(-1);
-            } else {
-                ts.setPoint(point);
-            }
-            
-            ts.setNo(res.getInt("NO")); // 回数(1または2)
+
+            int point1 = res.getInt("POINT1");
+            ts.setPoint1(res.wasNull() ? -1 : point1);
+
+            int point2 = res.getInt("POINT2");
+            ts.setPoint2(res.wasNull() ? -1 : point2);
+
             list.add(ts);
         }
         return list;
@@ -41,26 +38,32 @@ public class TestListSubjectDao extends Dao {
 
     /**
      * 科目情報を条件に成績一覧を取得する（横並び表示用）
+     * 1回目・2回目の点数を1行にまとめて取得する
      */
-    public List<TestListSubject> filter(School school, int entYear, String classNum, Subject subject) throws Exception {
+    public List<TestListSubject> filter(int entYear, String classNum, Subject subject, School school) throws Exception {
         List<TestListSubject> list = new ArrayList<>();
-        
-        // STUDENTをベースにTESTをLEFT JOINすることで、点数がない学生も表示対象にする
-        String sql = "SELECT STUDENT.ENT_YEAR, STUDENT.STUDENT_NO, STUDENT.STUDENT_NAME, STUDENT.CLASS_NUM, TEST.POINT, TEST.NO " +
-                     "FROM STUDENT " +
-                     "LEFT JOIN TEST ON STUDENT.STUDENT_NO = TEST.STUDENT_NO " +
-                     "  AND STUDENT.SCHOOL_CD = TEST.SCHOOL_CD " +
-                     "  AND TEST.SUBJECT_CD = ? " +
-                     "WHERE STUDENT.SCHOOL_CD = ? AND STUDENT.ENT_YEAR = ? AND STUDENT.CLASS_NUM = ? " +
-                     "ORDER BY STUDENT.STUDENT_NO ASC, TEST.NO ASC";
+
+        // STUDENTをベースにTESTを回数別にLEFT JOINして1行に横並びで取得する
+        String sql = "SELECT S.ENT_YEAR, S.STUDENT_NO, S.STUDENT_NAME, S.CLASS_NUM, " +
+                     "T1.POINT AS POINT1, T2.POINT AS POINT2 " +
+                     "FROM STUDENT S " +
+                     "LEFT JOIN TEST T1 ON S.STUDENT_NO = T1.STUDENT_NO " +
+                     "  AND S.SCHOOL_CD = T1.SCHOOL_CD " +
+                     "  AND T1.SUBJECT_CD = ? AND T1.NO = 1 " +
+                     "LEFT JOIN TEST T2 ON S.STUDENT_NO = T2.STUDENT_NO " +
+                     "  AND S.SCHOOL_CD = T2.SCHOOL_CD " +
+                     "  AND T2.SUBJECT_CD = ? AND T2.NO = 2 " +
+                     "WHERE S.SCHOOL_CD = ? AND S.ENT_YEAR = ? AND S.CLASS_NUM = ? " +
+                     "ORDER BY S.STUDENT_NO ASC";
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, subject.getCd());
-            statement.setString(2, school.getSchoolCd());
-            statement.setInt(3, entYear);
-            statement.setString(4, classNum);
-            
+            statement.setString(2, subject.getCd());
+            statement.setString(3, school.getSchoolCd());
+            statement.setInt(4, entYear);
+            statement.setString(5, classNum);
+
             try (ResultSet resultSet = statement.executeQuery()) {
                 list = postFilter(resultSet);
             }

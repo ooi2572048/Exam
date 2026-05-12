@@ -5,7 +5,7 @@
  
     <c:param name="content">
         <section class="me-4">
-            <h2 class="h3 mb-3 bg-secondary bg-opacity-10 py-2 px-4">成績参照</h2>
+            <h2 class="h3 mb-3 bg-secondary bg-opacity-10 py-2 px-4">成績一覧（科目）</h2>
  
             <div class="border mx-3 mb-3 p-3 rounded">
                 <%-- 科目検索フォーム --%>
@@ -17,7 +17,7 @@
                             <select class="form-select form-select-sm" name="f1">
                                 <option value="0">--------</option>
                                 <c:forEach var="year" items="${ent_year_set}">
-                                    <option value="${year}">${year}</option>
+                                    <option value="${year}" ${year == f1 ? 'selected' : ''}>${year}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -26,7 +26,7 @@
                             <select class="form-select form-select-sm" name="f2">
                                 <option value="0">--------</option>
                                 <c:forEach var="num" items="${class_num_set}">
-                                    <option value="${num}">${num}</option>
+                                    <option value="${num}" ${num == f2 ? 'selected' : ''}>${num}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -35,7 +35,7 @@
                             <select class="form-select form-select-sm" name="f3">
                                 <option value="0">--------</option>
                                 <c:forEach var="sub" items="${subjects}">
-                                    <option value="${sub.cd}">${sub.name}</option>
+                                    <option value="${sub.cd}" ${sub.cd == f3 ? 'selected' : ''}>${sub.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -43,6 +43,10 @@
                             <button class="btn btn-secondary btn-sm w-50">検索</button>
                         </div>
                     </div>
+                    <%-- 画像① 条件不足エラー --%>
+                    <c:if test="${not empty subject_error}">
+                        <div class="text-warning small mt-2" style="padding-left:10px;">${subject_error}</div>
+                    </c:if>
                 </form>
  
                 <hr>
@@ -53,9 +57,8 @@
                         <div class="col-auto text-secondary small" style="width:100px;">学生情報</div>
                         
                         <div class="col-6">
-                        	<div class="col-auto small">学生番号</div>
-                            <input type="text" name="f5" class="form-control form-control-sm" value="${f5}" placeholder="学生番号を入力してください" required>
-                        
+                        <div class="col-auto small">学生番号</div>
+                            <input type="text" name="f5" class="form-control" placeholder="学生番号を入力してください" required>
                         </div>
                         <div class="col-2">
                             <button class="btn btn-secondary btn-sm w-50">検索</button>
@@ -64,66 +67,32 @@
                 </form>
             </div>
  
+            <%-- 画像② 検索条件はOKだが結果0件 --%>
+            <c:if test="${not empty subject_no_result}">
+                <div class="mx-3 small">${subject_no_result}</div>
+            </c:if>
+ 
             <div class="mx-3 mt-4">
-                <%-- 【追加】科目検索の結果表示（⑭の部分） --%>
-                <c:if test="${not empty subject_tests}">
+                <c:if test="${not empty selected_subject and empty subject_no_result}">
+                    <div>科目：${selected_subject.name}</div>
                     <table class="table table-hover">
                         <thead>
                             <tr class="border-bottom">
-                                <th>入学年度</th>
-                                <th>クラス</th>
-                                <th>学生番号</th>
-                                <th>氏名</th>
-                                <th>1回</th>
-                                <th>2回</th>
+                                <th>入学年度</th><th>クラス</th><th>学生番号</th><th>氏名</th><th>1回</th><th>2回</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="ts" items="${subject_tests}">
                                 <tr>
-                                    <td>${ts.entYear}</td>
-                                    <td>${ts.classNum}</td>
-                                    <td>${ts.studentNo}</td>
-                                    <td>${ts.studentName}</td>
-                                    <td><c:choose><c:when test="${ts.point1 == -1}">-</c:when><c:otherwise>${ts.point1}</c:otherwise></c:choose></td>
-                                    <td><c:choose><c:when test="${ts.point2 == -1}">-</c:when><c:otherwise>${ts.point2}</c:otherwise></c:choose></td>
+                                    <td>${ts.entYear}</td><td>${ts.classNum}</td><td>${ts.studentNo}</td><td>${ts.studentName}</td>
+                                    <td>${ts.point1 == -1 ? '-' : ts.point1}</td>
+                                    <td>${ts.point2 == -1 ? '-' : ts.point2}</td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
                 </c:if>
-                <%-- 科目検索のエラーメッセージ --%>
-                <c:if test="${not empty subject_no_result}">
-                    <div class="small">${subject_no_result}</div>
-                </c:if>
-                <c:if test="${not empty subject_error}">
-                    <div class="small text-warning" style="margin-left: 100px;">${subject_error}</div>
-                </c:if>
-
-                <%-- 既存の学生検索の結果表示 --%>
-                <c:if test="${not empty selected_student}">
-                    <div>氏名：${selected_student.studentName} (${selected_student.studentNo})</div>
-                    <c:if test="${empty student_not_found }">
-	                    <table class="table table-hover">
-	                        <thead>
-	                            <tr class="border-bottom"><th>科目名</th><th>科目コード</th><th>回数</th><th>点数</th></tr>
-	                        </thead>
-	                        <tbody>
-	                            <c:forEach var="ts" items="${student_tests}">
-	                                <tr><td>${ts.subjectName}</td><td>${ts.subjectCd}</td><td>${ts.num}</td><td>${ts.point}</td></tr>
-	                            </c:forEach>
-	                        </tbody>
-	                    </table>
-                    </c:if>
-                </c:if>
-                <c:if test="${not empty student_not_found}">
-                    <div class="small">${student_not_found}</div>
-                </c:if>             
             </div>
-            <div class="small text-primary mx-3">
-    			科目情報を選択または学生情報を入力して検索ボタンをクリックしてください。
-			</div>
-            
         </section>
     </c:param>
 </c:import>
