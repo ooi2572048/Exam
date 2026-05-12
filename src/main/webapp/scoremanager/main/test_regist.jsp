@@ -66,7 +66,7 @@
 
                     <table class="table table-hover mt-3">
                         <thead>
-                            <tr class="table-light">
+                            <tr>
                                 <th>入学年度</th>
                                 <th>クラス</th>
                                 <th>学生番号</th>
