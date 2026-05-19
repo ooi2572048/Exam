@@ -91,25 +91,25 @@
                                     <td>${ts.point1 == -1 ? '-' : ts.point1}</td>
                                     <td>${ts.point2 == -1 ? '-' : ts.point2}</td>
                                  
-  <td>
-    <form method="post" action="TestDelete.action">
-
-        <input type="hidden" name="studentNo" value="${ts.studentNo}">
-        <input type="hidden" name="subjectCd" value="${selected_subject.cd}">
-        <input type="hidden" name="num" value="1">
-
-        <button class="btn btn-danger btn-sm">1回削除</button>
-    </form>
-
-    <form method="post" action="TestDelete.action"">
-
-        <input type="hidden" name="studentNo" value="${ts.studentNo}">
-        <input type="hidden" name="subjectCd" value="${selected_subject.cd}">
-        <input type="hidden" name="num" value="2">
-
-        <button class="btn btn-danger btn-sm">2回削除</button>
-    </form>
-</td>
+										  <td>
+										    <form method="post" action="TestDelete.action">
+										
+										        <input type="hidden" name="studentNo" value="${ts.studentNo}">
+										        <input type="hidden" name="subjectCd" value="${selected_subject.cd}">
+										        <input type="hidden" name="num" value="1">
+										
+										        <button class="btn btn-danger btn-sm">1回削除</button>
+										    </form>
+										
+										    <form method="post" action="TestDelete.action"">
+										
+										        <input type="hidden" name="studentNo" value="${ts.studentNo}">
+										        <input type="hidden" name="subjectCd" value="${selected_subject.cd}">
+										        <input type="hidden" name="num" value="2">
+										
+										        <button class="btn btn-danger btn-sm">2回削除</button>
+										    </form>
+										</td>
                                 </tr>
                             </c:forEach>
                         </tbody>

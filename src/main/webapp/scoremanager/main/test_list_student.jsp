@@ -76,15 +76,15 @@
                                 <c:forEach var="ts" items="${student_tests}">
                                     <tr><td>${ts.subjectName}</td><td>${ts.subjectCd}</td><td>${ts.num}</td><td>${ts.point}</td>
                                     
-<td>
-    <form method="post" action="TestDelete.action">
-        <input type="hidden" name="studentNo" value="${selected_student.studentNo}">
-        <input type="hidden" name="subjectCd" value="${ts.subjectCd}">
-        <input type="hidden" name="num" value="${ts.num}">
-
-        <button class="btn btn-danger btn-sm">削除</button>
-    </form>
-</td>
+										<td>
+										    <form method="post" action="TestDelete.action">
+										        <input type="hidden" name="studentNo" value="${selected_student.studentNo}">
+										        <input type="hidden" name="subjectCd" value="${ts.subjectCd}">
+										        <input type="hidden" name="num" value="${ts.num}">
+										
+										        <button class="btn btn-danger btn-sm">削除</button>
+										    </form>
+										</td>
                            
                                     </tr>
                                     <thead>

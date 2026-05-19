@@ -7,10 +7,10 @@ public class TestListSubject implements Serializable {
     private String studentNo;
     private String studentName;
     private String classNum;
-    private int point;          // DBからの一時保持用
-    private int point1 = -1;    // 1回目の点数
-    private int point2 = -1;    // 2回目の点数
-    private int no;             // テスト回数保持用
+    private int point;         
+    private int point1 = -1;    
+    private int point2 = -1;    
+    private int no;            
 
     public TestListSubject() {}
 
